@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,11 +42,12 @@ INSTALLED_APPS = [
 
     #libraies
     'rest_framework',
+    # 'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 
-    
     #apps
-    'book_store',
-    'account',
+    'applications.book_store',
+    'applications.account',
 
 ]
 
@@ -146,10 +149,30 @@ EMAIL_PORT = 587 # Порт, который будет использовать�
 EMAIL_USE_TLS = True # Использовать ли TLS (безопасное) соединение при общении с SMTP-сервером
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD') #Пароль, который будет использоваться для SMTP-сервера, определенного в EMAIL_HOST.
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')         # Этот параметр используется вместе с EMAIL_HOST_USERаутентификацией на SMTP-сервере.
-                                                    
+
 #Имя пользователя, которое будет использоваться для SMTP-сервера, определенного в EMAIL_HOST. Если оно пусто, Django не будет пытаться пройти аутентификацию.
 
 
 """
 Настройки email
 """
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        # 'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
+
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=155),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer", "Token"),
+}
