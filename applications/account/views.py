@@ -29,28 +29,6 @@ class ActivationAPIView(APIView):
         user.save(update_fields=['is_active', 'activation_code'])
         return Response('Успешно', status=200)
 
-
-# class LoginAPIView(ObtainAuthToken):
-#     serializer_class = LoginSerializer
-#
-
-
-# class LogoutAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-
-# class LogoutAPIView(APIView):
-#     permission_class = [IsAuthenticated]
-#     def post(self, request):
-#         token = Token.objects.get(user=request.user)
-#         data_value = request.data.get('email')
-#         user = User.objects.filter(email=data_value).first()
-#         if user:
-#             token.delete()
-#             return Response('Успешно', status=201)
-#         return Response('вы не указали email')
-
-
 class ChangePasswordAPIView(APIView):
     def post(self, request):
         email = request.data.get('email', '')
@@ -67,13 +45,13 @@ class ChangePasswordAPIView(APIView):
         user.set_password(new_password)
         user.save()
         send_activate(user.email, user.activation_code)
-        # send_mail(
-        #     'Уведомление о смене пароля',
-        #     'Ваш пароль был успешно изменен.',
-        #     'RodionDereha@gmail.com',
-        #     [email],
-        #     fail_silently=False,
-        # )
+        send_mail(
+            'Уведомление о смене пароля',
+            'Ваш пароль был успешно изменен.',
+            'RodionDereha@gmail.com',
+            [email],
+            fail_silently=False,
+        )
 
         update_session_auth_hash(request, user)
         return Response('Пароль успешно изменен', status=status.HTTP_200_OK)

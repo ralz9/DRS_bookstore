@@ -48,7 +48,7 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError('Нет такого пользователя')
 
     def validate(self, attrs):
-        user = authenticate(email=attrs.get('email'), password = attrs.get('password'))
+        user = authenticate(email=attrs.get('email'), password=attrs.get('password'))
         if not user:
             raise serializers.ValidationError('Неверный пароль')
         attrs['user'] = user

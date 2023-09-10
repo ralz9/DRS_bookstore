@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from applications.book_store.models import CustomUser
 from applications.book_store.permissions import IsOwnerOrAdminReadOnly
 from applications.book_store.serializers import PostSerializer
@@ -9,7 +9,7 @@ from applications.book_store.serializers import PostSerializer
 class ListPostView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CreatePostView(generics.CreateAPIView):
@@ -33,6 +33,6 @@ class UpdatePostView(generics.UpdateAPIView):
     permission_classes = [IsOwnerOrAdminReadOnly]
 
 class DeletePostView(generics.DestroyAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = [IsOwnerOrAdminReadOnly]
+        queryset = CustomUser.objects.all()
+        serializer_class = PostSerializer
+        permission_classes = [IsOwnerOrAdminReadOnly]
